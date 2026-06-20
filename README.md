@@ -45,6 +45,33 @@ The goal is not to remove the human from the process. The goal is to give perfor
 
 ---
 
+## ✈️ Naming Convention: The PerfPilot Aviation Model
+
+PerfPilot uses an aviation-inspired naming model to make the platform easier to understand, remember, and explain.
+
+Performance testing has many parallels to aviation: every test needs a plan, a controlled launch, real-time monitoring, telemetry, communication, analysis, and a final flight record. PerfPilot applies that metaphor to the Performance Testing Lifecycle while keeping the actual repository structure practical and developer-friendly.
+
+The codebase uses clear folder names such as `agent-framework/`, `mcp-perf-suite/`, `docker/`, and `docs/`. The aviation names are used in the documentation and product language so users can quickly understand how the pieces fit together.
+
+| Product Name      | Technical Component                        | Meaning                                                                                                          |
+| ----------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| **PerfPilot**     | Overall framework and orchestrator concept | The pilot coordinating the full performance testing mission                                                      |
+| **Pilot**         | Orchestrator agent                         | Plans the workflow, delegates tasks, and keeps humans in control                                                 |
+| **Copilots**      | Specialized agents                         | Domain-specific agents that assist with scripting, execution, monitoring, analysis, reporting, and notifications |
+| **PerfPilot Hub** | `mcp-perf-suite/gateway-mcp/`              | The central MCP gateway that gives agents one endpoint for the full performance testing toolchain                |
+| **FlightDeck**    | `agent-framework/frontend/`                | The human-facing web UI where users interact with PerfPilot                                                      |
+| **ACARS**         | A2A server inside `agent-framework/`       | The agent-to-agent communication layer for upstream and downstream AI frameworks                                 |
+| **Flight Log**    | Test artifacts, reports, and run history   | The record of what happened during a performance testing mission                                                 |
+| **Black Box**     | PerfMemory and persisted debugging context | The memory layer that helps agents recall prior issues, fixes, and lessons learned                               |
+
+In short: **PerfPilot is the pilot, the specialist agents are copilots, and PerfPilot Hub is the airport-style tool hub where they access the systems needed to complete the mission.**
+
+This gives users a simple mental model:
+
+> “My PerfPilots are handling my performance testing workflow, while I stay in control from the FlightDeck.”
+
+---
+
 ## 🧭 Repository Structure
 
 ```text
@@ -77,9 +104,13 @@ perfpilot/
 
 It routes requests to specialized MCP servers such as JMeter, BlazeMeter, Datadog, PerfAnalysis, PerfReport, Confluence, PerfMemory, MS Teams, and SharePoint.
 
-### 🤖 PerfPilot Agents
+### 🤖 Pilot and Copilots
 
-**PerfPilot Agents** is the multi-agent layer. It is designed around an orchestrator agent and specialist agents for each major phase of the Performance Testing Lifecycle.
+The **Pilot** is the orchestrator agent. It understands the user’s request, creates a plan, delegates work, coordinates progress, and keeps the human in control.
+
+The **Copilots** are specialist agents. Each Copilot focuses on a specific phase of the Performance Testing Lifecycle, such as script generation, test execution, monitoring, analysis, reporting, or notifications.
+
+Together, the Pilot and Copilots form the agent layer of PerfPilot.
 
 Planned and/or evolving agents include:
 
@@ -93,9 +124,11 @@ Planned and/or evolving agents include:
 | 📄 Reporting Agent     | Drafts performance test reports                                 |
 | 📣 Notifications Agent | Sends summaries, links, and status updates to stakeholders      |
 
-### 🖥️ PerfPilot Web UI
+### 🖥️ FlightDeck
 
-The Web UI is planned as a browser-based chat interface for interacting with the PerfPilot orchestrator and specialist agents.
+**FlightDeck** is the human-facing web UI. It gives users a cockpit-style command surface for chatting with PerfPilot, reviewing workflow progress, approving human-in-the-loop actions, and viewing results.
+
+The implementation lives under `agent-framework/frontend/`, but the product experience is called **PerfPilot FlightDeck**.
 
 It is built around:
 
@@ -105,6 +138,14 @@ It is built around:
 * AG-UI
 * A Python backend
 * Persistent conversation and workflow state
+
+### 📡 ACARS
+
+**ACARS** is the agent-to-agent communication layer. In aviation, ACARS is associated with structured aircraft communication. In PerfPilot, the term represents the A2A server that allows upstream and downstream AI frameworks to communicate with the PerfPilot agent runtime.
+
+The implementation lives inside `agent-framework/`.
+
+> "PerfPilot gives performance engineers the feeling that “my PerfPilots are handling my performance testing workflow” — while the human remains in command."
 
 ---
 
